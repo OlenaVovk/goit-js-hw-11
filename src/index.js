@@ -9,7 +9,15 @@ form.addEventListener('submit', onSubmit);
 
 function onSubmit (evt) {
     evt.preventDefault();
-    fetchAPI (evt.currentTarget.elements[0].value);
+    fetchAPI(evt.currentTarget.elements[0].value)
+        .then(data => {
+            console.log('data', data);
+            if (data.length === 0) {
+                console.log('Sorry, there are no images matching your search query. Please try again.');
+            }
+
+        })
+        .catch(error => console.log ('Упсс щось пішло не так: ', error.message))
     evt.currentTarget.reset();
 }
 
@@ -17,8 +25,11 @@ function onSubmit (evt) {
 
 async function fetchAPI (name) {
     const response = await fetch(`${BASE_URL}?key=${KEY_API}&q=${name}&${SETTINGS}`);
+    console.log('response', response);
+    if (!response.ok) {
+        throw new Error(response.statusText);
+    }
     const newImg = await response.json();
-    console.log(newImg.hits)
     return newImg.hits;
 }
 
