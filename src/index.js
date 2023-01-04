@@ -14,6 +14,7 @@ let page = 1;
 let searchQuery = '';
 
 
+
 const form = document.querySelector('form');
 const divEl = document.querySelector('.gallery');
 const loadBtn = document.querySelector('.load-more');
@@ -23,14 +24,16 @@ loadBtn.addEventListener('click', onClick);
 
 function onSubmit (evt) {
   evt.preventDefault();
+  page = 1;
   searchQuery = evt.currentTarget.elements.searchQuery.value
   console.log('search', searchQuery);
   if (searchQuery === '') {
-    //divEl.innerHTML = '';
-    return Notiflix.Notify.failure('Введіть будь ласка текст для пошуку!');  
+    divEl.innerHTML = '';
+    loadBtn.classList.add('visually-hidden');
+    return Notiflix.Notify.failure('Введіть будь ласка текст для пошуку!');   
   }
   fetchData(searchQuery);
-  //evt.currentTarget.reset();
+  evt.currentTarget.reset();
 }
 
 function onClick () {
@@ -53,24 +56,30 @@ async function fetchData (res) {
     const data = await fetchAPI(res, page);
     //console.log('data', data);
     if (data.hits.length === 0) {
-        Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
-        divEl.innerHTML = '';
-        return;
-      }
+      Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+      divEl.innerHTML = '';
+      loadBtn.classList.add('visually-hidden');
+      return;
+    }
+    console.log('page1',page);
     if (page === 1) {
-     Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`); 
-    }  
-    renderImages(data.hits);
-    loadBtn.classList.remove('visually-hidden');
-    console.log(page);
+      Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`); 
+      insertImages(data.hits);
+      loadBtn.classList.remove('visually-hidden');
+    } else {
+      console.log('page2',page);
+      addImages(data.hits);
+    }
+    
+    
   } catch (error) {
     console.log ('Oй помилочка: ', error.message);
     Notiflix.Notify.failure('Упсс щось пішло не так... Спробуйте пізніше!');
   }
 }
 
-function renderImages(data) {
-    const markup = data.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => 
+function makeMarkup(data) {
+    return data.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => 
     `<div class="photo-card">
       <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
       <div class="info">
@@ -80,35 +89,19 @@ function renderImages(data) {
         <p class="info-item"><span><b>Downloads</b></span><span>${downloads}</span></p>
       </div>
     </div>`).join('');
-    divEl.insertAdjacentHTML('beforeend', markup);
+    
+}
+
+function addImages(data) {
+  divEl.insertAdjacentHTML('beforeend', makeMarkup(data));
+}
+
+function insertImages(data) {
+  divEl.innerHTML = makeMarkup(data);
 }
 
 
 
-
-
-
-
-
-
-
-
-
-
-//fetchAPI(evt.currentTarget.elements[0].value)
-//    .then(data => {
-//      if (data.hits.length === 0) {
-//        Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
-//        divEl.innerHTML = '';
-//        return;
-//      }
-//      Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
-//      renderImages(data.hits);
-//      })
-//    .catch(error => {
-//      console.log ('Oй помилочка: ', error.message);
-//      Notiflix.Notify.failure('Упсс щось пішло не так... Спробуйте пізніше!')
-//    })
 
 
 
