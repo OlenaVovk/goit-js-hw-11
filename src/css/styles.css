@@ -59,7 +59,7 @@ height: auto;
   display: flex;
 }
 
-info-item {
+.info-item {
   display: flex;
   flex-direction: column;
 }
