@@ -1,6 +1,10 @@
-import './css/styles.css';
+
 import Notiflix from 'notiflix';
 import axios from 'axios';
+import SimpleLightbox from "simplelightbox";
+
+import './css/styles.css';
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const BASE_URL = 'https://pixabay.com/api/';
 const KEY_API = '32584793-3eb2bb36516e5beb26bc398d7';
@@ -41,22 +45,15 @@ async function fetchData (res) {
 }
 
 function renderImages(data) {
-    const markup = data.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => `<div class="photo-card">
-    <img src="${webformatURL}" alt="${tags}" loading="lazy" />
-    <div class="info">
-    <p class="info-item">
-      <b>Likes</b>${likes}
-    </p>
-    <p class="info-item">
-      <b>Views</b>${views}
-    </p>
-    <p class="info-item">
-      <b>Comments</b>${comments}
-    </p>
-    <p class="info-item">
-      <b>Downloads</b>${downloads}
-    </p>
-    </div>
+    const markup = data.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => 
+    `<div class="photo-card">
+      <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
+      <div class="info">
+        <p class="info-item"><span><b>Likes</b></span><span>${likes}</span></p>
+        <p class="info-item"><span><b>Views</b></span><span>${views}</span></p>
+        <p class="info-item"><span><b>Comments</b></span><span>${comments}</span></p>
+        <p class="info-item"><span><b>Downloads</b></span><span>${downloads}</span></p>
+      </div>
     </div>`).join('');
     divEl.innerHTML = markup;
 }
