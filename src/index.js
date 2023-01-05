@@ -1,10 +1,7 @@
 
+import './css/styles.css';
 import Notiflix from 'notiflix';
 import axios from 'axios';
-import SimpleLightbox from "simplelightbox";
-
-import './css/styles.css';
-import "simplelightbox/dist/simple-lightbox.min.css";
 
 const BASE_URL = 'https://pixabay.com/api/';
 const KEY_API = '32584793-3eb2bb36516e5beb26bc398d7';
@@ -15,6 +12,7 @@ let page = 1;
 let searchQuery = '';
 let max;
 
+
 const form = document.querySelector('form');
 const divEl = document.querySelector('.gallery');
 const loadBtn = document.querySelector('.load-more');
@@ -22,12 +20,6 @@ const messageEl = document.querySelector('.message');
 
 form.addEventListener('submit', onSubmit);
 loadBtn.addEventListener('click', onClick);
-
-let gallery = new SimpleLightbox('.gallery a', {
-    widthRatio: 0.3,
-    heightRatio: 0.3,
-    maxZoom: 3,
-});
 
 function onSubmit (evt) {
   evt.preventDefault();
@@ -92,14 +84,14 @@ async function fetchData (res) {
 
 function makeMarkup(data) {
   return data.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => 
-    `<div class="photo-card">
-      <a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy"/></a>
-      <div class="info">
-        <p class="info-item"><span><b>Likes</b></span><span>${likes}</span></p>
-        <p class="info-item"><span><b>Views</b></span><span>${views}</span></p>
-        <p class="info-item"><span><b>Comments</b></span><span>${comments}</span></p>
-        <p class="info-item"><span><b>Downloads</b></span><span>${downloads}</span></p>
-      </div>
+  `<div class="photo-card">
+    <a class="gallery__item" href="${largeImageURL}"><img class="img" src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
+        <div class="info">
+          <p class="info-item"><span><b>Likes</b></span><span>${likes}</span></p>
+          <p class="info-item"><span><b>Views</b></span><span>${views}</span></p>
+          <p class="info-item"><span><b>Comments</b></span><span>${comments}</span></p>
+          <p class="info-item"><span><b>Downloads</b></span><span>${downloads}</span></p>
+        </div>
     </div>`).join('');   
 }
 
@@ -111,8 +103,10 @@ function insertImages(data) {
   divEl.innerHTML = makeMarkup(data);
 }
 
-
-
+//let gallery = new SimpleLightbox('.gallery a', {
+//    widthRatio: 0.6,
+//    heightRatio: 0.6,
+//});
 
 
 
