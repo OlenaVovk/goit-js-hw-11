@@ -89,3 +89,10 @@ img {
   clip: rect(0 0 0 0);
 }
 
+.message {
+  text-align: center;
+  color: #344ec2;
+}
+
+
+
