@@ -23,6 +23,12 @@ const messageEl = document.querySelector('.message');
 form.addEventListener('submit', onSubmit);
 loadBtn.addEventListener('click', onClick);
 
+let gallery = new SimpleLightbox('.gallery a', {
+    widthRatio: 0.3,
+    heightRatio: 0.3,
+    maxZoom: 3,
+});
+
 function onSubmit (evt) {
   evt.preventDefault();
   page = 1;
@@ -87,7 +93,7 @@ async function fetchData (res) {
 function makeMarkup(data) {
   return data.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => 
     `<div class="photo-card">
-      <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
+      <a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy"/></a>
       <div class="info">
         <p class="info-item"><span><b>Likes</b></span><span>${likes}</span></p>
         <p class="info-item"><span><b>Views</b></span><span>${views}</span></p>
