@@ -1,17 +1,16 @@
 
 import '../css/styles.css';
 import Notiflix from 'notiflix';
-import axios from 'axios';
 
-const BASE_URL = 'https://pixabay.com/api/';
-const KEY_API = '32584793-3eb2bb36516e5beb26bc398d7';
-const SETTINGS = 'image_type=photo&orientation=horizontal&safesearch=true';
-const PAGE_SET = 40;
+import * as API from './fetchAPI'
+
+console.log(API);
 
 let page = 1;
 let searchQuery = '';
 let max;
 
+const PAGE_SET = 40;
 
 const form = document.querySelector('form');
 const divEl = document.querySelector('.gallery');
@@ -43,14 +42,9 @@ function onClick () {
   fetchData(searchQuery);
 }
 
-async function fetchAPI (name, page = 1 ) {
-    const response = await axios.get(`${BASE_URL}?key=${KEY_API}&q=${name}&${SETTINGS}&page=${page}&per_page=${PAGE_SET}`);
-    return response.data;
-}
-
 async function fetchData (res) {
   try {
-    const data = await fetchAPI(res, page);
+    const data = await API.fetchAPI(res, page);
     max = Math.ceil(data.totalHits/PAGE_SET);
     
     if (data.hits.length === 0) {
