@@ -1,10 +1,7 @@
 
 import '../css/styles.css';
 import Notiflix from 'notiflix';
-
 import * as API from './fetchAPI'
-
-console.log(API);
 
 let page = 1;
 let searchQuery = '';
@@ -41,6 +38,7 @@ function onClick () {
   }
   fetchData(searchQuery);
 }
+
 
 async function fetchData (res) {
   try {
