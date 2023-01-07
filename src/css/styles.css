@@ -29,12 +29,47 @@ button {
   cursor: pointer;
 }
 
+button:hover,
+button:focus {
+  background-color: #a5adc5;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+}
+
+.link {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  display: block;
+  width: 40px;
+  height: 35px;
+  background-color: #7d90e4;
+  text-decoration: none;
+  text-align: center;
+  color: aliceblue;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  border-radius: 7%;
+  border-color: #5b5c64;
+}
+
+.link:hover,
+.link:focus {
+  background-color: #7080c9;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+
 .load-more {
   background-color: #344ec2;
   color: aliceblue;
   margin-top: 30px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.load-more:hover,
+.load-more:focus {
+  background-color: #4860c8;
 }
 
 .gallery{

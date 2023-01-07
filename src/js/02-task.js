@@ -1,12 +1,11 @@
 import '../css/styles.css';
 import Notiflix from 'notiflix';
-import * as API from './fetchAPI'
+import * as API from './fetchAPI';
 
+const PAGE_SET = 40;
 let page = 1;
 let searchQuery = '';
 let max;
-
-const PAGE_SET = 40;
 
 const form = document.querySelector('form');
 const divEl = document.querySelector('.gallery');
@@ -16,12 +15,35 @@ const targetEl = document.querySelector('.js-guard');
 const options = {
   root: null,
   rootMargin: '600px',
-  threshold: 1.0
+  threshold: 1.0,
 }
 const observer = new IntersectionObserver(onLoad, options);
 
 form.addEventListener('submit', onSubmit);
 document.addEventListener('scroll', updateImg);
+
+function onSubmit (evt) {
+  evt.preventDefault();
+  page = 1;
+  searchQuery = evt.currentTarget.elements.searchQuery.value
+  if (!searchQuery) {
+    divEl.innerHTML = '';
+    messageEl.classList.add('visually-hidden');
+    Notiflix.Notify.failure('Введіть будь ласка текст для пошуку!'); 
+    return;
+  }
+  
+  fetchData(searchQuery);
+  evt.currentTarget.reset();
+}
+
+function updateImg() {
+  const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: "smooth",
+  });
+}
 
 function onLoad (entries, observer){
   entries.forEach(entry => {
@@ -32,26 +54,7 @@ function onLoad (entries, observer){
   });
 }
 
-function onSubmit (evt) {
-  evt.preventDefault();
-  page = 1;
-  searchQuery = evt.currentTarget.elements.searchQuery.value
-  if (!searchQuery) {
-    divEl.innerHTML = '';
-    return Notiflix.Notify.failure('Введіть будь ласка текст для пошуку!');   
-  }
-  fetchData(searchQuery);
-  evt.currentTarget.reset();
-}
 
-
-function updateImg() {
-  const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: "smooth",
-  });
-}
 
 async function fetchData (res) {
   try {
@@ -86,6 +89,17 @@ async function fetchData (res) {
   }
 }
 
+
+
+
+function addImages(data) {
+  divEl.insertAdjacentHTML('beforeend', makeMarkup(data));
+}
+
+function insertImages(data) {
+  divEl.innerHTML = makeMarkup(data);
+}
+
 function makeMarkup(data) {
   return data.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => 
   `<div class="photo-card">
@@ -97,12 +111,4 @@ function makeMarkup(data) {
           <p class="info-item"><span><b>Downloads</b></span><span>${downloads}</span></p>
         </div>
     </div>`).join('');   
-}
-
-function addImages(data) {
-  divEl.insertAdjacentHTML('beforeend', makeMarkup(data));
-}
-
-function insertImages(data) {
-  divEl.innerHTML = makeMarkup(data);
 }
