@@ -21,7 +21,7 @@ function onSubmit (evt) {
   evt.preventDefault();
   page = 1;
   searchQuery = evt.currentTarget.elements.searchQuery.value
-  if (searchQuery === '') {
+  if (!searchQuery) {
     divEl.innerHTML = '';
     loadBtn.classList.add('visually-hidden');
     return Notiflix.Notify.failure('Введіть будь ласка текст для пошуку!');   
@@ -45,7 +45,7 @@ async function fetchData (res) {
     const data = await API.fetchAPI(res, page);
     max = Math.ceil(data.totalHits/PAGE_SET);
     
-    if (data.hits.length === 0) {
+    if (!data.hits.length) {
       Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
       divEl.innerHTML = '';
       loadBtn.classList.add('visually-hidden');
