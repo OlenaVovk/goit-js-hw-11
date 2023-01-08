@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "axios": "^1.2.2",
+    "baguettebox.js": "^1.11.1",
     "modern-normalize": "^1.1.0",
     "notiflix": "^3.2.5",
     "only-scrollbar": "^0.3.7",

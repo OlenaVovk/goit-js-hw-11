@@ -1,7 +1,8 @@
 import '../css/styles.css';
 import Notiflix from 'notiflix';
+import baguetteBox from 'baguettebox.js';
 import * as API from './fetchAPI';
-import {addImages, insertImages} from './renderMarkup';
+//import {addImages, insertImages} from './renderMarkup';
 
 
 const PAGE_SET = 40;
@@ -22,7 +23,7 @@ const options = {
 const observer = new IntersectionObserver(onLoad, options);
 
 form.addEventListener('submit', onSubmit);
-document.addEventListener('scroll', updateImg);
+//document.addEventListener('scroll', updateImg);
 
 function onSubmit (evt) {
   evt.preventDefault();
@@ -38,13 +39,13 @@ function onSubmit (evt) {
   evt.currentTarget.reset();
 }
 
-function updateImg() {
-  const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
-  window.scrollBy({
-    top: cardHeight*2,
-    behavior: "smooth",
-  });
-}
+//function updateImg() {
+//  const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
+//  window.scrollBy({
+//    top: cardHeight*2,
+//    behavior: "smooth",
+//  });
+// }
 
 function onLoad (entries, observer){
   entries.forEach(entry => {
@@ -71,11 +72,12 @@ async function fetchData (res) {
     
     if (page === 1) {
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`); 
+      divEl.innerHTML = '';
       insertImages(data.hits, divEl);
       observer.observe(targetEl);
       messageEl.classList.add('visually-hidden');
     } else {
-      addImages(data.hits, divEl);
+      insertImages(data, elem)
     }
 
     if (page === max) {
@@ -90,4 +92,34 @@ async function fetchData (res) {
   }
 }
 
+function makeMarkup(data) {
+
+  return  data.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => 
+  `<div class="photo-card">
+    <a class="gallery__item" href="${largeImageURL}"><img class="img" src="${webformatURL}" data-source="${largeImageURL}" alt="${tags}" loading="lazy"/></a>
+        <div class="info">
+          <p class="info-item"><span><b>Likes</b></span><span>${likes}</span></p>
+          <p class="info-item"><span><b>Views</b></span><span>${views}</span></p>
+          <p class="info-item"><span><b>Comments</b></span><span>${comments}</span></p>
+          <p class="info-item"><span><b>Downloads</b></span><span>${downloads}</span></p>
+        </div>
+    </div>`).join('');  
+}
+
+
+  let gallery = new SimpleLightbox('.gallery a');
+  console.log(gallery);
+  
+
+
+
+function insertImages(data, elem) {
+  elem.insertAdjacentHTML('beforeend', makeMarkup(data));
+  
+  gallery.refresh();
+  
+
+}
+
+   
 
