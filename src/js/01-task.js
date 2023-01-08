@@ -2,7 +2,9 @@
 import '../css/styles.css';
 import Notiflix from 'notiflix';
 import OnlyScroll from 'only-scrollbar';
-import * as API from './fetchAPI'
+import * as API from './fetchAPI';
+import {addImages, insertImages} from './renderMarkup';
+import {clickOpenModalHendler, clickCloseModalHendler} from './lightbox';
 
 let page = 1;
 let searchQuery = '';
@@ -56,12 +58,12 @@ async function fetchData (res) {
     
     if (page === 1) {
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`); 
-      insertImages(data.hits);
+      insertImages(data.hits, divEl);
       divEl.addEventListener('click', clickOpenModalHendler);
       loadBtn.classList.remove('visually-hidden');
       messageEl.classList.add('visually-hidden');
     } else {
-      addImages(data.hits);
+      addImages(data.hits, divEl);
     }
 
     if (page === max) {
@@ -76,70 +78,14 @@ async function fetchData (res) {
   }
 }
 
-function makeMarkup(data) {
-  return data.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => 
-  `<div class="photo-card" id="scroll-container-id">
-    <a class="gallery__item" href="${largeImageURL}"><img class="img" src="${webformatURL}" data-source="${largeImageURL}" alt="${tags}" loading="lazy"/></a>
-        <div class="info">
-          <p class="info-item"><span><b>Likes</b></span><span>${likes}</span></p>
-          <p class="info-item"><span><b>Views</b></span><span>${views}</span></p>
-          <p class="info-item"><span><b>Comments</b></span><span>${comments}</span></p>
-          <p class="info-item"><span><b>Downloads</b></span><span>${downloads}</span></p>
-        </div>
-    </div>`).join('');   
-}
-
-function addImages(data) {
-  divEl.insertAdjacentHTML('beforeend', makeMarkup(data));
-}
-
-function insertImages(data) {
-  divEl.innerHTML = makeMarkup(data);
-}
-
-
 //lightbox
-
 const lightbox = document.createElement('div');
 lightbox.id = 'lightbox';
 document.body.appendChild(lightbox);
 lightbox.addEventListener('click', clickCloseModalHendler);
-
-function clickOpenModalHendler (evt){
-  evt.preventDefault();
-  console.log(evt.target);
-  if (evt.target.nodeName !== "IMG"){
-    return;
-  }
-  const images = document.querySelectorAll('img');
-  images.forEach(() => {
-    lightbox.classList.add('active');
-    const img = document.createElement('img');
-    img.src = evt.target.dataset.source;
-    while(lightbox.firstChild){
-      lightbox.removeChild(lightbox.firstChild);
-    }
-  lightbox.append(img);
-  })
-  document.addEventListener('keydown', onEscPress);   
-};
-
-function clickCloseModalHendler (evt) {
-  if (evt.target.nodeName !== "IMG"){
-    return
-  }
-  lightbox.classList.remove('active'); 
-  document.removeEventListener('keydown', onEscPress);
-};
-
-function onEscPress (evt) {
-  if (evt.code === 'Escape'){
-    lightbox.classList.remove('active');  
-  };  
-}
-
-
+ 
+//smooth scrolling
 const scroll = new OnlyScroll(document.scrollingElement, {
     damping: 0.8,
-    eventContainer: window
+    eventContainer: window,
 });
