@@ -1,6 +1,7 @@
 
 import '../css/styles.css';
 import Notiflix from 'notiflix';
+import OnlyScroll from 'only-scrollbar';
 import * as API from './fetchAPI'
 
 let page = 1;
@@ -77,7 +78,7 @@ async function fetchData (res) {
 
 function makeMarkup(data) {
   return data.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => 
-  `<div class="photo-card">
+  `<div class="photo-card" id="scroll-container-id">
     <a class="gallery__item" href="${largeImageURL}"><img class="img" src="${webformatURL}" data-source="${largeImageURL}" alt="${tags}" loading="lazy"/></a>
         <div class="info">
           <p class="info-item"><span><b>Likes</b></span><span>${likes}</span></p>
@@ -138,4 +139,7 @@ function onEscPress (evt) {
 }
 
 
-
+const scroll = new OnlyScroll(document.scrollingElement, {
+    damping: 0.8,
+    eventContainer: window
+});
