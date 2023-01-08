@@ -78,7 +78,7 @@ async function fetchData (res) {
 function makeMarkup(data) {
   return data.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => 
   `<div class="photo-card">
-    <a class="gallery__item" href="${largeImageURL}"><img class="img" src="${webformatURL}" data-source="${largeImageURL}" alt="${tags}" loading="lazy" /></a>
+    <a class="gallery__item" href="${largeImageURL}"><img class="img" src="${webformatURL}" data-source="${largeImageURL}" alt="${tags}" loading="lazy"/></a>
         <div class="info">
           <p class="info-item"><span><b>Likes</b></span><span>${likes}</span></p>
           <p class="info-item"><span><b>Views</b></span><span>${views}</span></p>
@@ -97,6 +97,7 @@ function insertImages(data) {
 }
 
 
+//lightbox
 
 const lightbox = document.createElement('div');
 lightbox.id = 'lightbox';

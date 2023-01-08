@@ -151,8 +151,10 @@ button:focus {
 }
 
 #lightbox img {
-  max-width: 60%;
-  min-height: 60%;
+  min-width: 600px;
+  min-height: 400px;
+  max-width: 85%;
+  max-height: 85%;
   padding: 5px;
   background-color: #344ec2;
   cursor: zoom-out;
