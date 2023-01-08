@@ -134,4 +134,26 @@ button:focus {
 }
 
 
+#lightbox {
+  position: fixed;
+  z-index: 1111;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(157, 163, 210, 0.4);
+  display: none;
+}
 
+#lightbox.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#lightbox img {
+  max-width: 60%;
+  min-height: 60%;
+  padding: 5px;
+  background-color: #344ec2;
+  cursor: zoom-out;
+}

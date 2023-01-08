@@ -2,6 +2,7 @@ import '../css/styles.css';
 import Notiflix from 'notiflix';
 import * as API from './fetchAPI';
 
+
 const PAGE_SET = 40;
 let page = 1;
 let searchQuery = '';
@@ -112,3 +113,4 @@ function makeMarkup(data) {
         </div>
     </div>`).join('');   
 }
+

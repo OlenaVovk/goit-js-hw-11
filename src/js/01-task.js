@@ -56,6 +56,7 @@ async function fetchData (res) {
     if (page === 1) {
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`); 
       insertImages(data.hits);
+      divEl.addEventListener('click', clickOpenModalHendler);
       loadBtn.classList.remove('visually-hidden');
       messageEl.classList.add('visually-hidden');
     } else {
@@ -77,7 +78,7 @@ async function fetchData (res) {
 function makeMarkup(data) {
   return data.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => 
   `<div class="photo-card">
-    <a class="gallery__item" href="${largeImageURL}"><img class="img" src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
+    <a class="gallery__item" href="${largeImageURL}"><img class="img" src="${webformatURL}" data-source="${largeImageURL}" alt="${tags}" loading="lazy" /></a>
         <div class="info">
           <p class="info-item"><span><b>Likes</b></span><span>${likes}</span></p>
           <p class="info-item"><span><b>Views</b></span><span>${views}</span></p>
@@ -95,10 +96,45 @@ function insertImages(data) {
   divEl.innerHTML = makeMarkup(data);
 }
 
-//let gallery = new SimpleLightbox('.gallery a', {
-//    widthRatio: 0.6,
-//    heightRatio: 0.6,
-//});
+
+
+const lightbox = document.createElement('div');
+lightbox.id = 'lightbox';
+document.body.appendChild(lightbox);
+lightbox.addEventListener('click', clickCloseModalHendler);
+
+function clickOpenModalHendler (evt){
+  evt.preventDefault();
+  console.log(evt.target);
+  if (evt.target.nodeName !== "IMG"){
+    return;
+  }
+  const images = document.querySelectorAll('img');
+  images.forEach(() => {
+    lightbox.classList.add('active');
+    const img = document.createElement('img');
+    img.src = evt.target.dataset.source;
+    while(lightbox.firstChild){
+      lightbox.removeChild(lightbox.firstChild);
+    }
+  lightbox.append(img);
+  })
+  document.addEventListener('keydown', onEscPress);   
+};
+
+function clickCloseModalHendler (evt) {
+  if (evt.target.nodeName !== "IMG"){
+    return
+  }
+  lightbox.classList.remove('active'); 
+  document.removeEventListener('keydown', onEscPress);
+};
+
+function onEscPress (evt) {
+  if (evt.code === 'Escape'){
+    lightbox.classList.remove('active');  
+  };  
+}
 
 
 
