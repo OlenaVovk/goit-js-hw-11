@@ -1,12 +1,10 @@
-//import baguetteBox from 'baguettebox.js';
-
 import '../css/styles.css';
 import Notiflix from 'notiflix';
-//import disableScroll from 'disable-scroll';
 import * as API from './fetchAPI';
 import { makeMarkup } from './renderMarkup';
 
 const PAGE_SET = 40;
+
 let page;
 let searchQuery = '';
 let max;
@@ -30,7 +28,7 @@ document.addEventListener('scroll', updateImg);
 function onSubmit (evt) {
   evt.preventDefault();
   searchQuery = evt.currentTarget.elements.searchQuery.value
-  console.log('searchQuery',searchQuery);
+  //console.log('searchQuery',searchQuery);
   page = 1;
   if (!searchQuery) {
     divEl.innerHTML = '';
@@ -55,8 +53,7 @@ function updateImg() {
 
 function onLoad (entries, observer){
   entries.forEach(entry => {
-    console.log('entry.isIntersecting', entry.isIntersecting)
-    console.log('page', page)
+   // console.log('page', page)
     if (!searchQuery) {
       return;
     }
@@ -73,18 +70,14 @@ async function fetchData (res) {
   try {
     const data = await API.fetchAPI(res, page);
     max = Math.ceil(data.totalHits/PAGE_SET);
-
-    console.log('data',data);
-    console.log('data.hits.length',data.hits.length);
-    
+    //console.log('data',data);
+    //console.log('data.hits.length',data.hits.length); 
     if (!data.hits.length) {
-      
       Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
       divEl.innerHTML = '';
       messageEl.classList.add('visually-hidden');
       return;
     }
-    
     if (page === 1) {
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`); 
       divEl.innerHTML = makeMarkup(data.hits);
@@ -95,7 +88,6 @@ async function fetchData (res) {
       divEl.insertAdjacentHTML('beforeend', makeMarkup(data.hits));
       gallery.refresh();
     }
-
     if (page === max) {
       messageEl.classList.remove('visually-hidden');
       observer.unobserve(targetEl);

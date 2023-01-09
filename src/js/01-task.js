@@ -12,7 +12,6 @@ let max;
 
 const PAGE_SET = 40;
 
-
 const form = document.querySelector('form');
 const divEl = document.querySelector('.gallery');
 const loadBtn = document.querySelector('.load-more');

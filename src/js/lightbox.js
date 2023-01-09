@@ -5,7 +5,6 @@ export function clickOpenModalHendler (evt){
   if (evt.target.nodeName !== "IMG"){
     return;
   }
-  
   const images = document.querySelectorAll('img');
   images.forEach(() => {
     lightbox.classList.add('active');
