@@ -40,9 +40,10 @@ button:focus {
   top: 15px;
   left: 15px;
   display: block;
-  width: 40px;
-  height: 35px;
-  background-color: #7d90e4;
+  width: 30px;
+  height: 30px;
+  padding: 3px;
+  background-color: #d7dae3;
   text-decoration: none;
   text-align: center;
   color: aliceblue;
@@ -142,6 +143,7 @@ button:focus {
   height: 100%;
   background-color: rgba(157, 163, 210, 0.4);
   display: none;
+   
 }
 
 #lightbox.active {
