@@ -1,13 +1,14 @@
+//import baguetteBox from 'baguettebox.js';
+
 import '../css/styles.css';
 import Notiflix from 'notiflix';
 import * as API from './fetchAPI';
-import {addImages, insertImages} from './renderMarkup';
-
 
 const PAGE_SET = 40;
 let page = 1;
 let searchQuery = '';
 let max;
+let gallery;  
 
 const form = document.querySelector('form');
 const divEl = document.querySelector('.gallery');
@@ -71,11 +72,12 @@ async function fetchData (res) {
     
     if (page === 1) {
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`); 
-      insertImages(data.hits, divEl);
+      divEl.innerHTML = '';
+      addImages(data.hits, divEl);
       observer.observe(targetEl);
       messageEl.classList.add('visually-hidden');
     } else {
-      addImages(data.hits, divEl);
+      addImages(data.hits, divEl)
     }
 
     if (page === max) {
@@ -90,4 +92,27 @@ async function fetchData (res) {
   }
 }
 
+function addImages(data, elem) {
+  elem.insertAdjacentHTML('beforeend', makeMarkup(data));
+  gallery = new SimpleLightbox('.gallery a');
+  if (page > 1) {
+    gallery.refresh();
+  }
+  return;
+}
 
+function makeMarkup(data) {
+  return  data.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => 
+  `<div class="photo-card">
+    <a class="gallery__item" href="${largeImageURL}"><img class="img" src="${webformatURL}" data-source="${largeImageURL}" alt="${tags}" loading="lazy"/></a>
+        <div class="info">
+          <p class="info-item"><span><b>Likes</b></span><span>${likes}</span></p>
+          <p class="info-item"><span><b>Views</b></span><span>${views}</span></p>
+          <p class="info-item"><span><b>Comments</b></span><span>${comments}</span></p>
+          <p class="info-item"><span><b>Downloads</b></span><span>${downloads}</span></p>
+        </div>
+    </div>`).join('');  
+}
+
+
+  
