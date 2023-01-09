@@ -12,6 +12,7 @@ let max;
 
 const PAGE_SET = 40;
 
+
 const form = document.querySelector('form');
 const divEl = document.querySelector('.gallery');
 const loadBtn = document.querySelector('.load-more');
@@ -19,6 +20,7 @@ const messageEl = document.querySelector('.message');
 
 form.addEventListener('submit', onSubmit);
 loadBtn.addEventListener('click', onClick);
+
 
 function onSubmit (evt) {
   evt.preventDefault();

@@ -2,6 +2,7 @@
 
 import '../css/styles.css';
 import Notiflix from 'notiflix';
+//import disableScroll from 'disable-scroll';
 import * as API from './fetchAPI';
 import { makeMarkup } from './renderMarkup';
 
